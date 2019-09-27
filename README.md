@@ -17,3 +17,5 @@ and finally a valid score is given
 
 https://asciinema.org/a/ZwkRdytjUJFiC4tOvubN5Nlrn
 
+# Found others
+https://github.com/mdedonno1337/docker-NFIQ2
