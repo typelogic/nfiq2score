@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+#
 import ctypes
 import sys,os
 from PIL import Image
