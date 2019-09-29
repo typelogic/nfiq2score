@@ -6,5 +6,5 @@
 
 # Usage
 - Create the image (https://asciinema.org/a/oQtQj7ZSHHjU8vrG08RX89edy)
-- Run a container from the image
+- Run a container from the image (https://asciinema.org/a/KDbjVrfSCx5JB0vo2DlJvERHS)
 - Enter into the container and run `/root/nfiq2.py /root/samples/0000994.png`
