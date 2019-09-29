@@ -8,4 +8,4 @@ docker pull gcc:6.5.0
 
 # Initial demo link:
 - https://asciinema.org/a/FAxC7JpIxZwuRaNCn3Rvnbkgw
-- https://asciinema.org/a/5FBeGsflcBzFlcobl32MMy07U
+- https://asciinema.org/a/ZGRIJmPLf2NmMdPmsE2fxOsIH
