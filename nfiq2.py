@@ -8,7 +8,7 @@ from io import BytesIO
 #   flask REST API
 #   flask file upload
 
-lib = ctypes.CDLL('/root/NFIQ2/NFIQ2/NFIQ2Algorithm/lib/libnfiq2.so')
+lib = ctypes.CDLL('/usr/local/lib/libnfiq2.so')
 
 def nfiq2(img_buf : bytes) -> int:
     return lib.nfiq2score(img_buf,len(img_buf))

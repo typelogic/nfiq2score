@@ -1,44 +1,21 @@
-################################################################################
-#
-#   Builder environnement
-#
-################################################################################
+FROM gcc:6.5.0
+MAINTAINER typelogic@pm.me
 
-FROM centos as builder
-LABEL maintainer "Marco.DeDonno@unil.ch"
+WORKDIR /root/
+EXPOSE 8000
 
-ADD NFIQ2.tgz /
+COPY exercise.patch nfiq2.py /root/
 
-RUN yum update -y
- 
-RUN yum group install -y "Development Tools" && \
-    yum install -y cmake
-
-RUN cd /NFIQ2/libOpenCV && \
-    cmake -D CMAKE_MAKE_PROGRAM=make /NFIQ2/OpenCV/
-
-RUN make -C /NFIQ2/libOpenCV \
-    opencv_core opencv_ts opencv_imgproc opencv_highgui opencv_flann \
-    opencv_features2d opencv_calib3d opencv_ml opencv_video opencv_objdetect \
-    opencv_contrib opencv_nonfree opencv_gpu opencv_photo opencv_stitching opencv_videostab
-
-RUN make -C /NFIQ2/NFIQ2/
-
-ENV LD_LIBRARY_PATH=/NFIQ2/biomdi/common/lib:/NFIQ2/biomdi/fingerminutia/lib:/NFIQ2/libOpenCV/lib
-
-################################################################################
-#
-#   Running environnement
-#
-################################################################################
-
-FROM centos
-
-COPY --from=builder /NFIQ2/NFIQ2/bin/ /NFIQ2/NFIQ2/bin/
-COPY --from=builder /NFIQ2/biomdi/common/lib/ /NFIQ2/biomdi/common/lib/
-COPY --from=builder /NFIQ2/biomdi/fingerminutia/lib/ /NFIQ2/biomdi/fingerminutia/lib/
-COPY --from=builder /NFIQ2/libOpenCV/lib/ /NFIQ2/libOpenCV/lib/
-
-COPY --from=builder /NFIQ2/complianceTestSet/ /NFIQ2/complianceTestSet/
-
-ENV LD_LIBRARY_PATH=/NFIQ2/libOpenCV/lib:/NFIQ2/biomdi/common/lib:/NFIQ2/biomdi/fingerminutia/lib
+RUN apt-get update && apt-get install -y --no-install-recommends && \
+    cd /root/ && \
+    wget http://www.cmake.org/files/v2.8/cmake-2.8.8.tar.gz && \
+    tar xvzf cmake-2.8.8.tar.gz && \
+    cd /root/cmake-2.8.8/ && \
+    ./configure && make && make install && cd /root/ && \
+    git clone https://github.com/usnistgov/NFIQ2.git && cp /root/exercise.patch NFIQ2 && \
+    && cd /root/NFIQ2/ && git apply exercise.patch && mkdir libOpenCV && cd libOpenCV && \
+    cmake -D CMAKE_MAKE_PROGRAM=make ../OpenCV && \
+    make opencv_core opencv_ts opencv_imgproc opencv_highgui opencv_flann opencv_features2d \
+        opencv_calib3d opencv_ml opencv_video opencv_objdetect opencv_contrib opencv_nonfree \
+        opencv_gpu opencv_photo opencv_stitching opencv_videostab && make install && \
+    cd /root/NFIQ2/ && make && make install 
