@@ -5,10 +5,6 @@
 - Docker build -t nfiq2image .
 
 # Usage
-
-Go inside container and:
-
-`nfiq2.py /root/samples/0000994.png`
-
-# Initial demo link:
-- https://asciinema.org/a/ZGRIJmPLf2NmMdPmsE2fxOsIH
+- Create the image (https://asciinema.org/a/oQtQj7ZSHHjU8vrG08RX89edy)
+- Run a container from the image
+- Enter into the container and run `/root/nfiq2.py /root/samples/0000994.png`
