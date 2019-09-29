@@ -1,10 +1,8 @@
 # fingerprint score server
-
-```
-git clone https://github.com/usnistgov/NFIQ2.git
-wget http://www.cmake.org/files/v2.8/cmake-2.8.8.tar.gz
-docker pull gcc:6.5.0
-```
+# steps
+- git clone https://github.com/typelogic.com/nfiq2score.git
+- cd nfiq2store/
+- Docker build -t nfiq2image .
 
 # Initial demo link:
 - https://asciinema.org/a/ZGRIJmPLf2NmMdPmsE2fxOsIH
