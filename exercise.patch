@@ -1,0 +1,71 @@
+diff --git a/NFIQ2/NFIQ2Algorithm/include/Data.h b/NFIQ2/NFIQ2Algorithm/include/Data.h
+index 620ab41..8f6a67f 100644
+--- a/NFIQ2/NFIQ2Algorithm/include/Data.h
++++ b/NFIQ2/NFIQ2Algorithm/include/Data.h
+@@ -62,6 +62,8 @@ namespace NFIQ
+ 		*/
+ 		void readFromFile(const std::string & filename);
+ 
++		void readFromRaw(unsigned char* buf, unsigned long len);
++
+ 		/**
+ 		* @fn writeToFile
+ 		* @brief Writes the content to a file.
+diff --git a/NFIQ2/NFIQ2Algorithm/include/NFIQ2Algorithm.h b/NFIQ2/NFIQ2Algorithm/include/NFIQ2Algorithm.h
+index 305ee44..49a4785 100644
+--- a/NFIQ2/NFIQ2Algorithm/include/NFIQ2Algorithm.h
++++ b/NFIQ2/NFIQ2Algorithm/include/NFIQ2Algorithm.h
+@@ -93,6 +93,34 @@ namespace NFIQ
+ 	};
+ }
+ 
++extern "C" {
++    int nfiq2score(unsigned char* buf,unsigned long len)
++    {
++        NFIQ::FingerprintImageData fpImage;
++        fpImage.readFromRaw(buf,len);
++
++        NFIQ::FingerprintImageData rawImage;
++        rawImage.fromBMP(fpImage);
++
++        NFIQ::NFIQ2Algorithm nfiq2;
++
++        std::list<NFIQ::ActionableQualityFeedback> actionableQuality;
++        std::list<NFIQ::QualityFeatureData> featureVector;
++        std::list<NFIQ::QualityFeatureSpeed> featureTimings;
++
++        unsigned int qualityScore = nfiq2.computeQualityScore (
++            rawImage,
++            true,
++            actionableQuality,
++            false,
++            featureVector,
++            false,
++            featureTimings);
++
++        return qualityScore;
++    }
++}
++
+ #endif
+ 
+ /******************************************************************************/
+diff --git a/NFIQ2/NFIQ2Algorithm/src/Data.cpp b/NFIQ2/NFIQ2Algorithm/src/Data.cpp
+index 6f85cea..e67b321 100644
+--- a/NFIQ2/NFIQ2Algorithm/src/Data.cpp
++++ b/NFIQ2/NFIQ2Algorithm/src/Data.cpp
+@@ -225,4 +225,12 @@ std::string Data::toBase64String() const
+ 	delete[] output;
+ 
+ 	return returnStr;
+-}
+\ No newline at end of file
++}
++
++void Data::readFromRaw(unsigned char* buf, unsigned long len)
++{
++    if (!buf || len <= 0)
++        throw NFIQ::NFIQException(NFIQ::e_Error_CannotReadFromFile);
++
++    this->assign(buf, len);
++}
