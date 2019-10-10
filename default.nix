@@ -3,6 +3,7 @@ with import <nixpkgs> {}; {
     name = "my-gcc6-environment";
     buildInputs = [
         gcc6
+        cmake_2_8
     ];
   };
 }
